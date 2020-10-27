@@ -2,7 +2,7 @@ class profile_postgres (
   Stdlib::Host $master,
   Array[Stdlib::Host] $slaves,
   String $password,
-  Stdlib::Port $postgres_port = '5432',
+  Stdlib::Port $postgres_port = 5432,
   String $replicationuser = 'repl',
 ) {
   case $facts['networking']['fqdn'] {
