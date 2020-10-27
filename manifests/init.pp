@@ -28,22 +28,21 @@ class profile_postgres (
     encoding             => 'UTF-8',
     locale               => 'en_US.UTF-8',
     manage_package_repo  => true,
-    version              => 'latest',
     manage_recovery_conf => $_manage_recovery_conf,
   }
   -> class { 'postgresql::server':
     listen_addresses => "localhost,${facts['networking']['ip']}",
   }
 
-  package { ['pg_activity', 'pgtune']:
-    ensure => present,
-  }
-  -> user { 'postgres':
+  #package { ['pg_activity', 'pgtune']:
+  #  ensure => present,
+  #}
+  user { 'postgres':
     shell          => '/bin/bash',
     home           => '/var/lib/pgsql',
     purge_ssh_keys => true,
   }
-  -> file { '/usr/lib/pgsql/.ssh':
+  -> file { '/var/lib/pgsql/.ssh':
     ensure => 'directory',
     owner  => 'postgres',
     group  => 'postgres',
