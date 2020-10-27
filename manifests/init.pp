@@ -5,7 +5,7 @@ class profile_postgres (
   Stdlib::Port $postgres_port = 5432,
   String $replicationuser = 'repl',
 ) {
-  case $facts['networking']['fqdn'] {
+  case $facts['networking']['ip'] {
     $master: {
       $_manage_recovery_conf = false
       postgresql::server::config_entry { 'synchronous_standy_names':
