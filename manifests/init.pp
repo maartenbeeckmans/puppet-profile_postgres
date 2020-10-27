@@ -63,9 +63,9 @@ class profile_postgres (
       home => $homepath,
     }
     ## export it
-    $pubkey = getvar("::${sshuser}_${_type}_pubkey")
-    $comment = getvar("::${sshuser}_${_type}_comment")
-    if $pubkey and $comment {
+    $_pubkey = getvar("::${sshuser}_${_type}_pubkey")
+    $_comment = getvar("::${sshuser}_${_type}_comment")
+    if $_pubkey and $_comment {
       @@ssh_authorized_key{$_comment:
         ensure  => 'present',
         type    => $_type,
@@ -76,11 +76,11 @@ class profile_postgres (
       }
     }
     # collect it
-    Ssh_Authorized_Key <<| tag == 'postgrescluster' and title != $comment |>>
+    Ssh_Authorized_Key <<| tag == 'postgrescluster' and title != $_comment |>>
   }
   ## export host key
-  if $facts['ssh']['ecdsa']['key']
-    @@sshkey{$::fqdn:
+  if $facts['ssh']['ecdsa']['key'] {
+    @@sshkey { $facts['networking']['fqdn']:
       host_aliases => $::ipaddress,
       type         => 'ecdsa-sha2-nistp256',
       key          => $::sshecdsakey,
