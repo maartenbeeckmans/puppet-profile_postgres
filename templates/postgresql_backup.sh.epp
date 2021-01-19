@@ -1,0 +1,26 @@
+<%- | Stdlib::AbsolutePath $backup_location,
+      String               $version,
+| -%>
+#!/bin/bash
+# File managed by Puppet
+# Manual changes will be overwritten
+
+BACKUP_FOLDER=<%= $backup_location %>
+POSTGRES_VERSION=<%= $version %>
+QUERY="SELECT datname FROM pg_database WHERE datistemplate = false ORDER BY datname;"
+DAYS_TO_KEEP=5
+PG_DUMP="$(which pg_dump)"
+PSQL="$(which psql)"
+
+# change PG_DUMP binary for a specifik postgres version
+[[ -x "/usr/pgsql-${POSTGRES_VERSION}/bin/pg_dump" ]] && PG_DUMP="/usr/pgsql-${POSTGRES_VERSION}/bin/pg_dump"
+
+# change PGSQL binary for a specific postgres version
+[[ -x "/usr/pgsql-${POSTGRES_VERSION}/bin/psql" ]] && PSQL="/usr/pgsql-${POSTGRES_VERSION}/bin/psql"
+
+for DB in `$PSQL -At -c "${QUERY}"`; do
+  echo "Backup up DB: ${DB}"
+  $PG_DUMP "${DB}" | gzip > "${BACKUP_FOLDER}/${DB}-`date +'%y%m%d_%H:%M:%S'`.sql.gz"
+done
+
+[[ "${BACKUP_FOLDER}" != '/' ]] && find "${BACKUP_FOLDER}" -maxdepth 1 -mtime +"${DAYS_TO_KEEP}" -exec rm -rf '{}' \;
