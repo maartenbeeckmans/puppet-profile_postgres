@@ -16,6 +16,10 @@ class profile_postgres (
   Stdlib::AbsolutePath $backup_location,
   String               $backup_device,
   String               $backup_ssh_command,
+  Boolean              $manage_sd_service,
+  String               $sd_service_name,
+  Array[String]        $sd_service_tags,
+  String               $listen_address,
   String               $collect_tag = lookup('postgres_tag', String, undef, 'postgres'),
 ) {
   profile_base::mount{ $libdir:
@@ -29,6 +33,7 @@ class profile_postgres (
   }
 
   class { 'postgresql::globals':
+    encoding            => 'UTF-8',
     manage_package_repo => false,
     version             => $version,
   }
@@ -37,6 +42,8 @@ class profile_postgres (
     listen_addresses        => '*',
     postgres_password       => $password,
   }
+
+  class { '::postgresql::client': }
 
   include profile_postgres::config_entries
 
@@ -52,10 +59,23 @@ class profile_postgres (
     include profile_postgres::backup
   }
 
+  if $manage_sd_service {
+    consul::service { $sd_service_name:
+      checks => [
+        {
+          tcp      => "${listen_address}:5432",
+          interval => '10s'
+        }
+      ],
+      port   => 5432,
+      tags   => $sd_service_tags,
+    }
+  }
+
   create_resources(::postgresql::server::db, $databases)
   create_resources(::postgresql::server::schema, $schemas)
   create_resources(::postgresql::server::role, $roles)
-  create_resources(::postgresql::server::pg_hba_rule, $hba_rules)
+  create_resources(::postgresql::server::pg_hba_rule, $hba_rules, { 'postgresql_version' => $version })
 
   Postgresql::Server::Db <<| tag == $collect_tag |>>
   Postgresql::Server::Schema <<| tag == $collect_tag |>>
