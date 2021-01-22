@@ -20,6 +20,7 @@ class profile_postgres (
   String               $sd_service_name,
   Array[String]        $sd_service_tags,
   String               $listen_address,
+  Boolean              $manage_prometheus_exporter,
   String               $collect_tag = lookup('postgres_tag', String, undef, 'postgres'),
 ) {
   profile_base::mount{ $libdir:
@@ -70,6 +71,10 @@ class profile_postgres (
       port   => 5432,
       tags   => $sd_service_tags,
     }
+  }
+
+  if $manage_prometheus_exporter {
+    include profile_prometheus::postgres_exporter
   }
 
   create_resources(::postgresql::server::db, $databases)

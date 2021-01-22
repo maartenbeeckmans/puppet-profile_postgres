@@ -14,6 +14,7 @@ profile_postgres::manage_sd_service: false
 profile_postgres::sd_service_name: postgres
 profile_postgres::sd_service_tags: []
 profile_postgres::listen_address: "%{factes.networking.ip}"
+profile_postgres::manage_prometheus_exporter: false
 profile_postgres::databases: {}
 profile_postgres::schemas: {}
 profile_postgres::roles: {}
