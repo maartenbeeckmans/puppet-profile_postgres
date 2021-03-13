@@ -1,5 +1,5 @@
 ---
-profile_postgres::version: '11'
+profile_postgres::version: '13'
 profile_postgres::libdir: '/var/lib/pgsql'
 profile_postgres::data_device: '/dev/vdb'
 profile_postgres::ip_mask_allow_all_users: '127.0.0.1/32'
@@ -10,6 +10,7 @@ profile_postgres::postgres_backup: true
 profile_postgres::backup_location: '/srv/postgres_backup'
 profile_postgres::backup_device: '/dev/vdc'
 profile_postgres::backup_ssh_command: '/usr/bin/ssh -T -x -p 22 -i /srv/rsnapshot/rsnapshot_key -o UserKnownHostsFile=/etc/rsnapshot_known_hosts'
+profile_postgres::manage_package_repo: true
 profile_postgres::manage_sd_service: false
 profile_postgres::sd_service_name: postgres
 profile_postgres::sd_service_tags: []

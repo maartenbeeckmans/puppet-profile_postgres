@@ -11,10 +11,6 @@ class profile_postgres::backup (
 
   profile_base::mount{ $backup_location:
     device => $backup_device,
-    mkdir  => false,
-  }
-  -> file { $backup_location:
-    ensure => directory,
     owner  => 'rsnapshot',
     group  => 'rsnapshot',
     mode   => '0755',

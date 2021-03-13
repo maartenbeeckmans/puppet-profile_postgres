@@ -5,6 +5,7 @@ class profile_postgres::config_entries (
   Integer              $shared_buffers       = floor($::memorysize_mb * 0.25),
   Integer              $effective_cache_size = floor($::memorysize_mb * 0.5),
   Stdlib::AbsolutePath $libdir               = $::profile_postgres::libdir,
+  String               $version              = $::profile_postgres::version,
 ) {
   postgresql::server::config_entry { 'track_activities':
     value => 'on',
@@ -22,7 +23,7 @@ class profile_postgres::config_entries (
     value => "${effective_cache_size}MB",
   }
   postgresql::server::config_entry { 'stats_temp_directory':
-    value => "${libdir}/tmp/",
+    value => "${libdir}/${version}/tmp/",
   }
   postgresql::server::config_entry { 'synchronous_commit':
     value => 'on',

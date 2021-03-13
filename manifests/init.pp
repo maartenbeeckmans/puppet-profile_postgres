@@ -16,6 +16,7 @@ class profile_postgres (
   Stdlib::AbsolutePath $backup_location,
   String               $backup_device,
   String               $backup_ssh_command,
+  Boolean              $manage_package_repo,
   Boolean              $manage_sd_service,
   String               $sd_service_name,
   Array[String]        $sd_service_tags,
@@ -25,8 +26,16 @@ class profile_postgres (
 ) {
   profile_base::mount{ $libdir:
     device => $data_device,
+    owner  => 'postgres',
+    group  => 'postgres',
   }
-  -> file { "${libdir}/tmp":
+  -> file { "${libdir}/${version}":
+    ensure => directory,
+    owner  => 'postgres',
+    group  => 'postgres',
+    mode   => '0755',
+  }
+  -> file { "${libdir}/${version}/tmp":
     ensure => directory,
     owner  => 'postgres',
     group  => 'postgres',
@@ -35,7 +44,7 @@ class profile_postgres (
 
   class { 'postgresql::globals':
     encoding            => 'UTF-8',
-    manage_package_repo => false,
+    manage_package_repo => $manage_package_repo,
     version             => $version,
   }
   -> class { 'postgresql::server':
