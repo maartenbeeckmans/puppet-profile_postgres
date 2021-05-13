@@ -1,6 +1,6 @@
 ---
 profile_postgres::version: '13'
-profile_postgres::libdir: '/var/lib/pgsql'
+profile_postgres::libdir: '/var/lib/postgresql'
 profile_postgres::data_device: '/dev/vdb'
 profile_postgres::ip_mask_allow_all_users: '127.0.0.1/32'
 profile_postgres::shared_buffers: "%{floor(facts.memory.system.total * 0.25)}"
