@@ -41,8 +41,7 @@ class profile_postgres (
     group  => 'postgres',
     mode   => '0755',
   }
-
-  class { 'postgresql::globals':
+  -> class { 'postgresql::globals':
     encoding            => 'UTF-8',
     manage_package_repo => $manage_package_repo,
     version             => $version,
@@ -52,8 +51,7 @@ class profile_postgres (
     listen_addresses        => '*',
     postgres_password       => $password,
   }
-
-  class { '::postgresql::client': }
+  -> class { '::postgresql::client': }
 
   include profile_postgres::config_entries
 
