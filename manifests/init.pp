@@ -17,7 +17,6 @@ class profile_postgres (
   String               $backup_device,
   String               $backup_ssh_command,
   Boolean              $manage_package_repo,
-  Boolean              $manage_sd_service,
   String               $sd_service_name,
   Array[String]        $sd_service_tags,
   String               $listen_address,
