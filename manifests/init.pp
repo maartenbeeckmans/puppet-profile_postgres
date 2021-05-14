@@ -22,7 +22,8 @@ class profile_postgres (
   Array[String]        $sd_service_tags,
   String               $listen_address,
   Boolean              $manage_prometheus_exporter,
-  String               $collect_tag = lookup('postgres_tag', String, undef, 'postgres'),
+  Boolean              $manage_sd_service            = lookup('manage_sd_service', Boolean, first, true),
+  String               $collect_tag                  = lookup('postgres_tag', String, undef, 'postgres'),
 ) {
   profile_base::mount{ $libdir:
     device => $data_device,

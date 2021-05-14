@@ -11,7 +11,6 @@ profile_postgres::backup_location: '/srv/postgres_backup'
 profile_postgres::backup_device: '/dev/vdc'
 profile_postgres::backup_ssh_command: '/usr/bin/ssh -T -x -p 22 -i /srv/rsnapshot/rsnapshot_key -o UserKnownHostsFile=/etc/rsnapshot_known_hosts'
 profile_postgres::manage_package_repo: true
-profile_postgres::manage_sd_service: false
 profile_postgres::sd_service_name: postgres
 profile_postgres::sd_service_tags: []
 profile_postgres::listen_address: "%{factes.networking.ip}"
