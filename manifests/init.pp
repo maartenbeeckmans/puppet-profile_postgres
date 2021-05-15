@@ -85,7 +85,7 @@ class profile_postgres (
     include profile_prometheus::postgres_exporter
   }
 
-  create_resources(::postgresql::server::db, $databases)
+  create_resources(::profile_postgres::database, $databases)
   create_resources(::postgresql::server::schema, $schemas)
   create_resources(::postgresql::server::role, $roles)
   create_resources(::postgresql::server::pg_hba_rule, $hba_rules, { 'postgresql_version' => $version })
