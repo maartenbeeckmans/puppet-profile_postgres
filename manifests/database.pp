@@ -16,7 +16,8 @@ define profile_postgres::database (
   }
 
   if $tag {
-    @@postgresql::server::db { $title:
+    @@postgresql::server::db { "${title}_${facts['networking']['fqdn']}":
+      dbname   => $title,
       user     => $user,
       password => $_password,
       grant    => $grant,
