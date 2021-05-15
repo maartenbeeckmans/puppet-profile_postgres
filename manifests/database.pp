@@ -29,7 +29,7 @@ define profile_postgres::database (
       database    => $title,
       auth_method => 'password',
       address     => "${facts['networking']['ip']}/32",
-      description => "Allow ${title} from ${facts['networking']['fqdn']}"
+      description => "Allow ${title} from ${facts['networking']['fqdn']}",
       tag         => $tag,
     }
   } else {
