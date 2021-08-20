@@ -24,6 +24,14 @@ class profile_postgres (
   Boolean              $manage_sd_service            = lookup('manage_sd_service', Boolean, first, true),
   String               $collect_tag                  = lookup('postgres_tag', String, undef, 'postgres'),
 ) {
+  if $facts['os']['family'] == 'RedHat' {
+    package { 'postgresql':
+      ensure   => 'disabled',
+      provider => 'dnfmodule',
+      before   => Class['Postgresql::Server'],
+    }
+  }
+
   profile_base::mount{ $libdir:
     device => $data_device,
     owner  => 'postgres',
