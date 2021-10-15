@@ -3,7 +3,7 @@
 #
 class profile_postgres (
   Stdlib::AbsolutePath $libdir,
-  String               $data_device,
+  Optional[String]     $data_device,
   String               $version,
   String               $ip_mask_allow_all_users,
   String               $password,
@@ -32,12 +32,16 @@ class profile_postgres (
     }
   }
 
-  profile_base::mount{ $libdir:
-    device => $data_device,
-    owner  => 'postgres',
-    group  => 'postgres',
+  if $data_device {
+    profile_base::mount{ $libdir:
+      device => $data_device,
+      owner  => 'postgres',
+      group  => 'postgres',
+      before => File["${libdir}/${version}"],
+    }
   }
-  -> file { "${libdir}/${version}":
+
+  file { "${libdir}/${version}":
     ensure => directory,
     owner  => 'postgres',
     group  => 'postgres',
