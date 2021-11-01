@@ -6,6 +6,8 @@ define profile_postgres::database (
   String           $password,
   String           $owner         = $user,
   Boolean          $encrypted     = true,
+  String           $encoding      = 'UTF8',
+  String           $locale        = 'en_US.UTF-8',
   String           $grant         = 'ALL',
   Optional[String] $tag           = undef,
 ) {
@@ -20,6 +22,8 @@ define profile_postgres::database (
       dbname   => $title,
       user     => $user,
       password => $_password,
+      encoding => $encoding,
+      locale   => $locale,
       grant    => $grant,
       tag      => $tag,
     }
